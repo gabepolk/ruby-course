@@ -2,14 +2,14 @@
 
 class Book
   attr_reader :author, :title
-  attr_accessor :id, :lentto, :status
+  attr_accessor :id, :lent_to, :status
 
   def initialize(title, author)
     @author = author
     @title = title
     @id = nil
     @status = 'available'
-    @lentto = nil
+    @lent_to = nil
   end
 
   def check_out
@@ -49,15 +49,15 @@ class Library
 
   def add_book(title, author)
     books << Book.new(title, author)
-    books.last.id = books.length
+    books.last.id = books.length - 1
   end
 
   def check_out_book(book_id, borrower)
-    if books[book_id - 1].status == 'available' && borrower.borrowing == false
-      books[book_id - 1].check_out
-      books[book_id - 1].lentto = borrower
+    if books[book_id].status == 'available' && borrower.borrowing == false
+      books[book_id].check_out
+      books[book_id].lent_to = borrower
       borrower.borrowing = true
-      return books[book_id - 1]
+      return books[book_id]
     else
       return nil
     end
@@ -65,31 +65,18 @@ class Library
 
   def check_in_book(book)
     book.status = 'available'
-    book.id = nil
-    book.lentto = nil
+    book.lent_to = nil
   end
 
   def get_borrower(book_id)
-    books[book_id -1].lentto.name
+    books[book_id].lent_to.name
   end
 
   def available_books
-    books_available = []
-    @books.each do |book|
-      if book.status == 'available'
-        books_available << book
-      end
-    end
-    return books_available
+    @books.select {|b| b.status == 'available'}
   end
 
   def borrowed_books
-    books_borrowed = []
-    @books.each do |book|
-      if book.status == 'checked_out'
-        books_borrowed << book
-      end
-    end
-    return books_borrowed
+    @books.select {|b| b.status == 'checked_out'}
   end
 end
