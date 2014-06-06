@@ -4,27 +4,19 @@ module Exercises
   #  - Triples a given string `str`
   #  - Returns "nope" if `str` is "wishes"
   def self.ex0(str)
-    if str == 'wishes'
-      return 'nope'
-    else
-      return str * 3
-    end
+    str != "wishes" ? str * 3 : "nope"
   end
 
   # Exercise 1
   #  - Returns the number of elements in the array
   def self.ex1(array)
-    if array.count == 0
-      return "The array is empty"
-    else
-      return array.count
-    end
+    array.count >= 1 ? array.count : "The array is empty"
   end
 
   # Exercise 2
   #  - Returns the second element of an array
   def self.ex2(array)
-    # TODO
+    array.count >= 1 ? array[1] : "The array is empty"
   end
 
   # Exercise 3

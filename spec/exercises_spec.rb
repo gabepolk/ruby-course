@@ -27,3 +27,19 @@ describe "Exercise 1" do
   end
 end
 
+describe "Exercise 2" do
+  it "returns 'The array is empty' if the array is empty" do
+    result = Exercises.ex2([])
+    expect(result).to eq("The array is empty")
+  end
+
+  it "returns the second element in an array" do
+    result = Exercises.ex2([1,2,3,4,5])
+    expect(result).to eq(2)
+  end
+end
+
+
+
+
+
