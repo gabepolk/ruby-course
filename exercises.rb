@@ -14,7 +14,11 @@ module Exercises
   # Exercise 1
   #  - Returns the number of elements in the array
   def self.ex1(array)
-    # TODO
+    if array.count == 0
+      return "The array is empty"
+    else
+      return array.count
+    end
   end
 
   # Exercise 2
