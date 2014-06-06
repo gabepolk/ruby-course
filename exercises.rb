@@ -22,19 +22,31 @@ module Exercises
   # Exercise 3
   #  - Returns the sum of the given array of numbers
   def self.ex3(array)
-    array.inject(0) { |sum, x| sum += x }
+    if array.count == 0
+      return "The array is empty"
+    else
+      array.inject(0) { |sum, x| sum += x }
+    end
   end
 
   # Exercise 4
   #  - Returns the max number of the given array
   def self.ex4(array)
-    array.sort.last
+    if array.count == 0
+      return "The array is empty"
+    else
+      array.sort.last
+    end
   end
 
   # Exercise 5
   #  - Iterates through an array and `puts` each element
   def self.ex5(array)
-    array.each { |x| puts x }
+    if array.count == 0
+      return "The array is empty"
+    else
+      array.each { |x| puts x }
+    end
   end
 
   # Exercise 6
@@ -42,7 +54,15 @@ module Exercises
   #  - If the last item is already 'panda', update
   #    it to 'GODZILLA' instead
   def self.ex6(array)
-    # TODO
+    if array.last == "panda"
+      array.pop
+      array.push("GODZILLA")
+      array.last
+    else
+      array.pop
+      array.push("panda")
+      array.last
+    end
   end
 
   # Exercise 7
