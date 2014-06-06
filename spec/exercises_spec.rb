@@ -46,6 +46,42 @@ describe "Exercise 3" do
   end
 end
 
+describe "Exercise 4" do
+  it "returns the max number of the given array" do
+    result = Exercises.ex4([2,33,91,5])
+    expect(result).to eq(91)
+  end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
