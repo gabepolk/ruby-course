@@ -39,6 +39,12 @@ describe "Exercise 2" do
   end
 end
 
+describe "Exercise 3" do
+  it "returns the sum of an array" do
+    result = Exercises.ex3([1,2,3,4,5])
+    expect(result).to eq(15)
+  end
+end
 
 
 
