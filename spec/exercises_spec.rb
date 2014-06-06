@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rspec'
 require 'pry-debugger'
+require 'stringio'
 require_relative '../exercises.rb'
 
 describe "Exercise 0" do
@@ -53,7 +54,20 @@ describe "Exercise 4" do
   end
 end
 
+describe "Exercise 5" do
+  before do
+    $stdout = StringIO.new
+  end
 
+  after(:all) do
+    $stdout = STDOUT
+  end
+
+  it "should iterate through an array and puts each element" do
+    Exercises.ex5(["this", "is", "an", "array", "of", "strings"])
+    expect($stdout.string).to match(/this\nis\nan\narray\nof\nstrings\n/)
+  end
+end
 
 
 
