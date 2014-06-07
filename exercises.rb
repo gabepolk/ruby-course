@@ -97,14 +97,14 @@ module Exercises
   #    Otherwise, returns `false`
   # Hint: Google for the wikipedia article on leap years
   def self.ex9(time)
-    # TODO
+    # year = Time.now.strftime("%Y")
+    if time % 4 == 0
+      return "Leap year!"
+    else
+      return "Not a leap year."
+    end
   end
 end
-
-# The year is evenly divisible by 4;
-# If the year can be evenly divided by 100, it is NOT a leap year, unless;
-# The year is also evenly divisible by 400. Then it is a leap year.
-
 
 class RPS
   # Rock, Paper, Scissors

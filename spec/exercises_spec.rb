@@ -135,7 +135,17 @@ describe "Exercise 8" do
   end
 end
 
+describe "Exercise 9" do
+  it "determines if a leap year returns true" do
+    result = Exercises.ex9(2012)
+    expect(result).to eq("Leap year!")
+  end
 
+  it "determines if a non-leap year returns false" do
+    result = Exercises.ex9(2014)
+    expect(result).to eq("Not a leap year.")
+  end
+end
 
 
 
