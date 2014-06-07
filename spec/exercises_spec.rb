@@ -95,7 +95,21 @@ describe "Exercise 6" do
   end
 end
 
+describe "Exercise 7" do
+  context "If the given string doesn't exist in the array" do
+    it "returns 'String not found in the array'" do
+      result = Exercises.ex7(["dog", "cat", "mouse", "squirrel"], "panda")
+      expect(result).to eq("String not found in the array")
+    end
+  end
 
+  context "Checks if a given string 'str' exists, " do
+    it "adds 'str' to the end of the array" do
+      result = Exercises.ex7(["dog", "cat", "mouse", "squirrel"], "cat")
+      expect(result).to eq(["dog", "mouse", "squirrel", "cat"])
+    end
+  end
+end
 
 
 
