@@ -82,7 +82,14 @@ module Exercises
   #    { :name => 'Bob', :occupation => 'Builder' }
   #    Iterate through `people` and print out their name and occupation.
   def self.ex8(people)
-    # TODO
+    if people.count == 0
+      return "The array is empty"
+    else
+      people.each_with_index do |item, index|
+        puts people[index][:name]
+        puts people[index][:occupation]
+      end
+    end
   end
 
   # Exercise 9
@@ -93,6 +100,10 @@ module Exercises
     # TODO
   end
 end
+
+# The year is evenly divisible by 4;
+# If the year can be evenly divided by 100, it is NOT a leap year, unless;
+# The year is also evenly divisible by 400. Then it is a leap year.
 
 
 class RPS

@@ -111,22 +111,29 @@ describe "Exercise 7" do
   end
 end
 
+describe "Exercise 8" do
+  before do
+    $stdout = StringIO.new
+  end
 
+  after(:all) do
+    $stdout = STDOUT
+  end
 
+  it "returns 'The array is empty' if the array is empty" do
+    result = Exercises.ex8([])
+    expect(result).to eq("The array is empty")
+  end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  it "iterates through an array and prints out 'name' and 'occupation'" do
+    people = [
+      { name: 'Bob', occupation: 'Builder' },
+      { name: 'John', occupation: 'Plumber' }
+    ]
+    Exercises.ex8(people)
+    expect($stdout.string).to match(/Bob\nBuilder\nJohn\nPlumber\n/)
+  end
+end
 
 
 
