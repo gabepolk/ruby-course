@@ -107,45 +107,68 @@ module Exercises
 end
 
 class RPS
-  # Rock, Paper, Scissors
-  # Make a 2-player game of rock paper scissors. It should have the following:
-  #
-  # It is initialized with two strings (player names).
-  # It has a `play` method that takes two strings:
-  #   - Each string reperesents a player's move (rock, paper, or scissors)
-  #   - The method returns the winner (player one or player two)
-  #   - If the game is over, it returns a string stating that the game is already over
-  # It ends after a player wins 2 of 3 games
-  #
-  # You will be using this class in the following class, which will let players play
-  # RPS through the terminal.
-end
 
+  attr_reader :player_1, :player_2, :rules
+  attr_accessor :winning_move, :play_count, :winners
+
+  def initialize(player_1, player_2)
+    @player_1 = player_1
+    @player_2 = player_2
+    @rules = {
+      :rock     => {:rock => :draw, :paper => :paper, :scissors => :rock},
+      :paper    => {:rock => :paper, :paper => :draw, :scissors => :scissors},
+      :scissors => {:rock => :rock, :paper => :scissors, :scissors => :draw}
+    }
+    @winning_move = nil
+    @winners = Hash.new(0)
+  end
+
+  def play(player_1_move, player_2_move)
+
+    @winning_move = @rules[player_1_move][player_2_move]
+    if @winning_move == :draw
+      puts "It was a draw!"
+    elsif @winning_move == player_1_move
+      puts "#{player_1} wins!"
+      @winners[player_1] += 1
+      return player_1
+    elsif @winning_move == player_2_move
+      puts "#{player_2} wins!"
+      @winners[player_2] += 1
+      return player_2
+    end
+  end
+
+end
 
 require 'io/console'
 class RPSPlayer
-  # (No specs are required for RPSPlayer)
-  #
-  # Complete the `start` method so that it uses your RPS class to present
-  # and play a game through the terminal.
-  #
-  # The first step is to read (gets) the two player names. Feed these into
-  # a new instance of your RPS class. Then `puts` and `gets` in a loop that
-  # lets both players play the game.
-  #
-  # When the game ends, ask if the player wants to play again.
-  def start
 
-    # TODO
+  def self.start
 
-    # PRO TIP: Instead of using plain `gets` for grabbing a player's
-    #          move, this line does the same thing but does NOT show
-    #          what the player is typing! :D
-    # This is also why we needed to require 'io/console'
-    # move = STDIN.noecho(&:gets)
+    puts "Player 1, please enter your name."
+    player_1 = gets.chomp
+    puts "Player 2, please enter your name."
+    player_2 = gets.chomp
+
+    @game = RPS.new(player_1, player_2)
+
+    while @game.winners[player_1] < 2 && @game.winners[player_2] < 2
+      puts "New game beginning!"
+
+      puts "#{player_1}, please enter your move: Rock, Paper, or Scissors."
+      player_1_move = STDIN.noecho(&:gets).chomp.to_sym
+      puts "#{player_2}, please enter your move: Rock, Paper, or Scissors."
+      player_2_move = STDIN.noecho(&:gets).chomp.to_sym
+
+      @game.play(player_1_move, player_2_move)
+    end
+
+    puts "Game over."
+    @game.winning_move = nil
+
   end
 end
-
 
 module Extensions
   # Extension Exercise

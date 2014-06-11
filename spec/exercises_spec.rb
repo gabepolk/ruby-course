@@ -147,10 +147,48 @@ describe "Exercise 9" do
   end
 end
 
+############# RPS
 
+describe RPS do
+  let(:game) {RPS.new("Bob", "Joe")}
 
+  describe "Initialize RPS game" do
+    it "is an RPS game" do
+      expect(game).to be_a(RPS)
+    end
 
+    it "accepts arguments for two names" do
+      expect(game.player_1).to eq("Bob")
+      expect(game.player_2).to eq("Joe")
+    end
+  end
 
+  describe "RPS play #method" do
 
+    context "when p1/Bob wins" do
+      it "returns winning move if p1 wins" do
+        game.play(:paper, :rock)
+        expect(game.winning_move).to eq(:paper)
+      end
+    end
 
+    context "when p2/Joe wins" do
+      it "returns 'Joe wins!'" do
+        game.play(:rock, :paper)
+        expect(game.winning_move).to eq(:paper)
+      end
+    end
 
+    context "when there is a draw" do
+      it "returns 'It was a draw!'" do
+        game.play(:paper, :paper)
+        expect(game.winning_move).to eq(:draw)
+      end
+    end
+
+    it "ends after a player wins 2 of 3 games" do
+    end
+    # it "returns 'The game is over' if you try to play again"
+  end
+
+end
