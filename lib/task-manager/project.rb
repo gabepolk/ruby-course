@@ -1,28 +1,32 @@
 
 class TM::Project
 
-  @@id_generator = 0
-  @@project_list = []
+  # @@id_generator = 0
+  # @@project_list = []
 
-  attr_reader :name
-  attr_accessor :project_id, :id_generator, :tasks, :completed_tasks, :incompleted_tasks, :project_list
+  # @@db = PG.connect(host: 'localhost', dbname: 'task-manager-db')
 
-  def initialize(name)
+  attr_accessor :name, :project_id
+
+  def initialize(project_id, name)
     @name = name
-    @project_id = @@id_generator
-    @@id_generator += 1
-    @@project_list << self
-    @tasks = []
-    @completed_tasks = []
-    @incompleted_tasks = []
+    @project_id = project_id
+    # TM.db.add_project(self)
+    # @project_id = @@id_generator
+    # @@id_generator += 1
+    # @@project_list << self
+    # @project = TM::Project.add_project(self) ## adds project to projects table in db
+    # @tasks = []
+    # @completed_tasks = []
+    # @incompleted_tasks = []
   end
+
+  # def self.add_project(project)
+  #   TM.db.add_project(self)
+  # end
 
   def self.list_projects
-    @@project_list
-  end
-
-  def id_generator
-    @@id_generator
+    TM.orm.list_projects
   end
 
   def add_task(description, priority, id=@tasks.count)

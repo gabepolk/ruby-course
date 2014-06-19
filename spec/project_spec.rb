@@ -6,31 +6,24 @@ describe 'Project' do
     expect(TM::Project).to be_a(Class)
   end
 
-  let(:project1) {TM::Project.new("Portfolio")}
-  let(:project2) {TM::Project.new("Website")}
+  let(:project1) {TM::Project.new(1, "Portfolio")}
+  let(:project2) {TM::Project.new(2, "Website")}
 
   describe '#initialize' do
     it "is a Project" do
       expect(project1).to be_a(TM::Project)
     end
-    it "creates a unique project id" do # reset class variablo for all tests
-      expect(project1.project_id).to eq(1)
-      expect(project2.project_id).to eq(2)
-    end
     it "accepts a name argument" do
       expect(project1.name).to eq("Portfolio")
     end
-    it "creates an array to store tasks" do
-      expect(project1.tasks).to be_a(Array)
-    end
-    it "the array is empty" do
-      expect(project1.tasks.count).to eq(0)
+    it "accepts an id argument" do
+      expect(project1.project_id).to eq(1)
     end
   end
 
   describe '.list_projects' do
     it "lists all projects" do
-      expect(TM::Project.list_projects.count).to eq(6)
+      expect(TM::Project.list_projects.count).to eq(2)
     end
   end
 
