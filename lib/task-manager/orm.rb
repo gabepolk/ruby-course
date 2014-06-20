@@ -12,7 +12,6 @@ module TM
       SQL
 
       result = @db_adapter.exec(command).values
-      # binding.pry
       projects = []
       result.each do |project|
         projects << TM::Project.new(project[0], project[1])
@@ -23,22 +22,32 @@ module TM
     def add_project(name)
       command = <<-SQL
         INSERT INTO projects (name)
-        VALUES('#{name}');
+        VALUES('#{name}')
+        RETURNING *;
       SQL
 
-      # result = @db
-      #TM::Project.new(result[0], result[1], created_at)
-
-      @db_adapter.exec(command)
+      result = @db_adapter.exec(command).values
+      TM::Project.new(result[0][0], result[0][1])
     end
 
-    def add_tasks(description, priority, complete, creation_time)
+    def add_task(description, priority, complete, project_id)
       command = <<-SQL
-        INSERT INTO tasks (description, priority, complete, creation_time)
-        VALUES('#{description}', '#{priority}', '#{complete}', '#{creation_time}');
+        INSERT INTO tasks (description, priority, complete, project_id)
+        VALUES('#{description}', '#{priority}', '#{complete}', '#{project_id}')
+        RETURNING *;
       SQL
+      # binding.pry
 
-      @db_adapter.exec(command)
+      result = @db_adapter.exec(command).values.first
+      TM::Task.new(result[0].to_i, result[1], result[2].to_i, convert_boolean(result[3]), result[4], result[5].to_i)
+    end
+
+    def convert_boolean(boolean)
+      if boolean == "f"
+        false
+      elsif boolean == "t"
+        true
+      end
     end
 
     def drop_tables
@@ -62,11 +71,16 @@ module TM
           description TEXT,
           priority INTEGER,
           complete BOOLEAN,
-          creation_time TEXT,
+          creation_time timestamp default current_timestamp,
           PRIMARY KEY( id ),
           project_id INTEGER REFERENCES projects( id )
         );
       SQL
+        # CREATE TABLE employees(
+        #   id SERIAL,
+        #   name TEXT,
+        #   PRIMARY KEY( id ),
+        # );
 
       @db_adapter.exec(command)
     end

@@ -63,7 +63,7 @@ class TM::TerminalClient
   end
 
   def self.create
-    TM::Project.new(@input_arr[1])
+    TM::Project.add_project(@input_arr[1])
     self.start
   end
 

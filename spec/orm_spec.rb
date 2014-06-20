@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe TM::ORM do
   before(:all) do
-    TM.orm.drop_tables
-    TM.orm.instance_variable_set(:@db_adapter, PG.connect(host: 'localhost', dbname: 'task-manager-test'))
+    TM.orm.instance_variable_set(:@db_adapter, PG.connect(host: 'localhost', dbname: 'task-manager-test') )
     TM.orm.create_tables
   end
   before(:each) do
@@ -13,13 +12,12 @@ describe TM::ORM do
     TM.orm.add_project("test2")
   end
 
-  # after(:all) do
-  #   TM.orm.drop_tables
-  # end
+  after(:all) do
+    TM.orm.drop_tables
+  end
 
   context "the singleton getter" do
     it "instantiates the ORM class" do
-      # binding.pry
       result1 = TM.orm
       result2 = TM.orm
 
@@ -28,10 +26,27 @@ describe TM::ORM do
   end
 
   it "adds a project" do
+    TM.orm.add_project("test3")
     result = TM.orm.list_projects
 
-    expect(result[0]).to be_a(Object)
+    expect(result[2]).to be_a(Object)
+    expect(result[2].project_id).to eq(3.to_s)
+    expect(result[2].name).to eq("test3")
   end
+
+  it "adds a task" do
+    result = TM.orm.add_task("This is a description", 5, false, 1)
+
+    expect(result).to be_a(Object)
+    expect(result.description).to eq("This is a description")
+    expect(result.priority).to eq(5)
+    expect(result.complete).to eq(false)
+    expect(result.creation_time).to be_a(Time)
+  end
+
+  # it "adds a task" do
+  #   result =
+  # end
 
   it "lists projects" do
     result = TM.orm.list_projects

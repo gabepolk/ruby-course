@@ -6,8 +6,23 @@ describe 'Project' do
     expect(TM::Project).to be_a(Class)
   end
 
-  let(:project1) {TM::Project.new(1, "Portfolio")}
-  let(:project2) {TM::Project.new(2, "Website")}
+  before(:all) do
+    TM.orm.instance_variable_set(:@db_adapter, PG.connect(host: 'localhost', dbname: 'task-manager-test') )
+    TM.orm.create_tables
+  end
+  before(:each) do
+    TM.orm.drop_tables
+    TM.orm.create_tables
+    TM.orm.add_project("test1")
+    TM.orm.add_project("test2")
+  end
+
+  after(:all) do
+    TM.orm.drop_tables
+  end
+
+  let(:project1) {TM::Project.add_project("Portfolio")}
+  let(:project2) {TM::Project.add_project("Website")}
 
   describe '#initialize' do
     it "is a Project" do
@@ -17,7 +32,7 @@ describe 'Project' do
       expect(project1.name).to eq("Portfolio")
     end
     it "accepts an id argument" do
-      expect(project1.project_id).to eq(1)
+      expect(project1.project_id).to eq(3.to_s)
     end
   end
 
@@ -28,7 +43,7 @@ describe 'Project' do
   end
 
   describe '#add_task' do
-    it "adds a task to the tasks array" do
+    xit "adds a task to the db" do
       project1.add_task("Design a wireframe", 5)
 
       expect(project1.tasks.count).to eq(1)
@@ -37,7 +52,7 @@ describe 'Project' do
 
   describe '#list_complete' do
     context "when all tasks are complete" do
-      it "sorts by creation time" do
+      xit "sorts by creation time" do
         project1.add_task("Use foundation for framework", 4, 987654321)
         project1.add_task("Design a wireframe", 5, 123456789)
         project1.tasks.select { |task| task.complete = true }
@@ -50,7 +65,7 @@ describe 'Project' do
 
   describe '#list_incomplete' do
     context "when all tasks are incomplete" do
-      it "sorts by priority" do
+      xit "sorts by priority" do
         project1.add_task("Use foundation for framework", 4, 0)
         project1.add_task("Design a wireframe", 3, 0)
         project1.add_task("Begin building", 5, 0)
@@ -62,7 +77,7 @@ describe 'Project' do
   end
 
   describe '.mark task' do
-    it "marks a task as complete" do
+    xit "marks a task as complete" do
       project_test = TM::Project.list_projects.first
       project_test.add_task("This is a description", 5)
       project_test.add_task("This is another description", 4)
