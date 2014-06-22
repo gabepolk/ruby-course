@@ -35,7 +35,7 @@ describe TM::ORM do
   end
 
   it "adds a task" do
-    result = TM.orm.add_task("This is a description", 5, false, 1)
+    result = TM.orm.add_task("This is a description", 5, 1, false)
 
     expect(result).to be_a(Object)
     expect(result.description).to eq("This is a description")
@@ -44,22 +44,35 @@ describe TM::ORM do
     expect(result.creation_time).to be_a(Time)
   end
 
-  # it "adds a task" do
-  #   result =
-  # end
-
   it "lists projects" do
     result = TM.orm.list_projects
     name = result.first.name
-    id = result.first.project_id.to_i
+    project_id = result.first.project_id.to_i
 
     expect(result[0]).to be_a(TM::Project)
     expect(name).to eq("test1")
-    expect(id).to eq(1)
+    expect(project_id).to eq(1)
+  end
+
+  it "lists tasks" do
+    TM.orm.add_task("This is a description", 5, 1, false)
+
+    result = TM.orm.list_tasks[0]
+    task_id = result.task_id.to_i
+    description = result.description
+    priority = result.priority.to_i
+    complete = result.complete
+    project_id = result.project_id.to_i
+
+    expect(result).to be_a(TM::Task)
+    expect(description).to eq("This is a description")
+    expect(task_id).to eq(1)
+    expect(complete).to eq("f")
+    expect(project_id).to eq(1)
+    expect(priority).to eq(5)
   end
 
   it "has a unique project_id" do
-    # db.add_project("test2")
     result = TM.orm.list_projects
     id1 = result[0].project_id.to_i
     id2 = result[1].project_id.to_i

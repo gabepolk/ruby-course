@@ -16,8 +16,8 @@ class TM::Project
     TM.orm.list_projects
   end
 
-  def add_task(description, priority, project_id)
-    TM.orm.add_task(description, priority, project_id)
+  def add_task(description, priority, project_id, complete=false)
+    TM.orm.add_task(description, priority, project_id, complete)
   end
 
   def self.complete_task(proj_id_find, task_id_find)
@@ -36,15 +36,19 @@ class TM::Project
     # task[0].complete = true
   end
 
+  def self.select_project(id)
+    TM::Project.list_projects.select { |p| p.project_id == id }
+  end
+
   def list_complete
     @completed_tasks = @tasks.select { |task| task.complete == true }
     @completed_tasks.sort_by! { |task| task.creation_time }
   end
 
   def list_incomplete
-    @incompleted_tasks = @tasks.select { |task| task.complete == false }
-    @incompleted_tasks.sort_by! { |task| task.priority }
-    @incompleted_tasks.reverse!
+    incompleted_tasks_arr = TM.orm.list_projects.select { |task| task.complete == false }
+    incompleted_tasks_arr.sort_by! { |task| task.priority }
+    incompleted_tasks_arr.reverse!
   end
 
 end

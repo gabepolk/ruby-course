@@ -1,11 +1,26 @@
 require 'spec_helper'
 
 describe 'Task' do
-  xit "exists" do
+  # before(:all) do
+  #   TM.orm.instance_variable_set(:@db_adapter, PG.connect(host: 'localhost', dbname: 'task-manager-test') )
+  #   TM.orm.create_tables
+  # end
+  # before(:each) do
+  #   TM.orm.drop_tables
+  #   TM.orm.create_tables
+  #   TM.orm.add_project("test1")
+  #   TM.orm.add_project("test2")
+  # end
+
+  # after(:all) do
+  #   TM.orm.drop_tables
+  # end
+
+  let(:task) {TM::Task.new("This is a description", 5, false, 1)}
+
+  it "exists" do
     expect(TM::Task).to be_a(Class)
   end
-
-  let(:task) {TM::Task.new("Design a wireframe", 5, 1)}
 
   describe '#initialize' do
     xit "is a Task" do

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'Project' do
-  # before block to reset id_generator
   it "exists" do
     expect(TM::Project).to be_a(Class)
   end
@@ -44,7 +43,7 @@ describe 'Project' do
 
   describe '#add_task' do
     xit "adds a task to the db" do
-      project1.add_task("Design a wireframe", 5)
+      project1.add_task("This is a description", 5, false, 1)
 
       expect(project1.tasks.count).to eq(1)
     end

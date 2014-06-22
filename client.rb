@@ -1,5 +1,7 @@
 
 require_relative 'lib/task-manager.rb'
+require 'pry-debugger'
+require 'time'
 
 class TM::TerminalClient
 
@@ -68,8 +70,11 @@ class TM::TerminalClient
   end
 
   def self.show
-    proj = TM::Project.list_projects[@input_arr[1].to_i]
-    proj.list_incomplete.each do |task|
+    # binding.pry
+    input_project_id = @input_arr[1]
+
+    proj = TM::Project.select_project(input_project_id)
+    proj[0].list_incomplete.each do |task|
       puts "\n"
       puts "  Description: #{task.description}"
       puts "  Priority: #{task.priority}"
@@ -94,8 +99,13 @@ class TM::TerminalClient
   end
 
   def self.add
-    proj = TM::Project.list_projects[@input_arr[1].to_i]
-    proj.add_task(@input_arr[3..-1].join(" "), @input_arr[2])
+    binding.pry
+    input_description = @input_arr[3..-1].join(" ")
+    input_priority = @input_arr[2].to_i
+    input_project_id = @input_arr[1]
+
+    proj = TM::Project.select_project(input_project_id)
+    proj[0].add_task(input_description, input_priority, input_project_id)
     self.start
   end
 

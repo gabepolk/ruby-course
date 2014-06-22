@@ -19,6 +19,19 @@ module TM
       projects
     end
 
+    def list_tasks
+      command = <<-SQL
+        SELECT * FROM tasks;
+      SQL
+
+      result = @db_adapter.exec(command).values
+      tasks = []
+      result.each do |task|
+        tasks << TM::Task.new(task[0], task[1], task[2], task[3], task[4], task[5])
+      end
+      tasks
+    end
+
     def add_project(name)
       command = <<-SQL
         INSERT INTO projects (name)
@@ -30,19 +43,18 @@ module TM
       TM::Project.new(result[0][0], result[0][1])
     end
 
-    def add_task(description, priority, complete, project_id)
+    def add_task(description, priority, project_id, complete)
       command = <<-SQL
-        INSERT INTO tasks (description, priority, complete, project_id)
-        VALUES('#{description}', '#{priority}', '#{complete}', '#{project_id}')
+        INSERT INTO tasks (description, priority, project_id, complete)
+        VALUES('#{description}', '#{priority}', '#{project_id}', '#{complete}')
         RETURNING *;
       SQL
-      # binding.pry
 
       result = @db_adapter.exec(command).values.first
-      TM::Task.new(result[0].to_i, result[1], result[2].to_i, convert_boolean(result[3]), result[4], result[5].to_i)
+      TM::Task.new(result[0].to_i, result[1], result[2].to_i, convert_to_boolean(result[3]), result[4], result[5].to_i)
     end
 
-    def convert_boolean(boolean)
+    def convert_to_boolean(boolean)
       if boolean == "f"
         false
       elsif boolean == "t"
