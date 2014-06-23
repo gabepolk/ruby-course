@@ -41,6 +41,14 @@ describe 'Project' do
     end
   end
 
+  describe '.list_tasks' do
+    it "lists all tasks for a given project" do
+      TM.orm.add_task("This is a description", 5, 1, false)
+
+      expect(TM::Project.list_tasks(1).count).to eq(1)
+    end
+  end
+
   describe '#add_task' do
     xit "adds a task to the db" do
       project1.add_task("This is a description", 5, false, 1)
@@ -49,28 +57,33 @@ describe 'Project' do
     end
   end
 
-  describe '#list_complete' do
+  describe '.list_complete' do
     context "when all tasks are complete" do
-      xit "sorts by creation time" do
-        project1.add_task("Use foundation for framework", 4, 987654321)
-        project1.add_task("Design a wireframe", 5, 123456789)
-        project1.tasks.select { |task| task.complete = true }
-        project1.list_complete
+      it "sorts by creation time" do
+        TM.orm.add_task("This is a description", 2, 1, false)
+        TM.orm.add_task("This is a description", 1, 1, true)
+        TM.orm.add_task("This is a description", 5, 1, false)
+        TM.orm.add_task("This is a description", 4, 1, true)
+        TM.orm.add_task("This is a description", 4, 1, false)
+        complete_tasks_arr = TM::Project.list_complete(1)
 
-        expect(project1.completed_tasks.first.description).to eq("Use foundation for framework")
+        expect(complete_tasks_arr.count).to eq(2)
+        expect(complete_tasks_arr[0].priority.to_i).to eq(4)
+        expect(complete_tasks_arr[1].priority.to_i).to eq(1)
       end
     end
   end
 
-  describe '#list_incomplete' do
+  describe '.list_incomplete' do
     context "when all tasks are incomplete" do
-      xit "sorts by priority" do
-        project1.add_task("Use foundation for framework", 4, 0)
-        project1.add_task("Design a wireframe", 3, 0)
-        project1.add_task("Begin building", 5, 0)
-        project1.list_incomplete
+      it "sorts by priority" do
+        TM.orm.add_task("This is a description", 2, 1, false)
+        TM.orm.add_task("This is a description", 1, 1, true)
+        TM.orm.add_task("This is a description", 5, 1, false)
+        TM.orm.add_task("This is a description", 4, 1, false)
+        incomplete_tasks_arr = TM::Project.list_incomplete(1)
 
-        expect(project1.incompleted_tasks.first.description).to eq("Begin building")
+        expect(incomplete_tasks_arr.count).to eq(3)
       end
     end
   end

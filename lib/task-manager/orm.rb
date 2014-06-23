@@ -71,6 +71,17 @@ module TM
       @db_adapter.exec(command)
     end
 
+    def complete_task_orm(proj_id, task_id)
+      command = <<-SQL
+        UPDATE tasks
+        SET complete = true
+        WHERE tasks.id = '#{proj_id}'
+        AND tasks.project_id = '#{task_id}';
+      SQL
+
+      @db_adapter.exec(command)
+    end
+
     def create_tables
       command = <<-SQL
         CREATE TABLE projects(

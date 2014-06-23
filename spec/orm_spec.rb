@@ -34,6 +34,16 @@ describe TM::ORM do
     expect(result[2].name).to eq("test3")
   end
 
+  it "marks a task as complete" do
+    TM.orm.add_task("This is a description", 5, 1, false)
+    TM.orm.add_task("This is a description", 4, 1, false)
+    TM.orm.add_task("This is a description", 1, 1, false)
+    TM.orm.complete_task_orm(1, 1)
+    result = TM::Project.list_complete(1)
+
+    expect(result.count).to eq(1)
+  end
+
   it "adds a task" do
     result = TM.orm.add_task("This is a description", 5, 1, false)
 

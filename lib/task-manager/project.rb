@@ -16,6 +16,10 @@ class TM::Project
     TM.orm.list_projects
   end
 
+  def self.list_tasks(target_project_id)
+    TM.orm.list_tasks.select { |t| t.project_id == target_project_id.to_s }
+  end
+
   def add_task(description, priority, project_id, complete=false)
     TM.orm.add_task(description, priority, project_id, complete)
   end
@@ -40,15 +44,19 @@ class TM::Project
     TM::Project.list_projects.select { |p| p.project_id == id }
   end
 
-  def list_complete
-    @completed_tasks = @tasks.select { |task| task.complete == true }
-    @completed_tasks.sort_by! { |task| task.creation_time }
+  def self.list_complete(target_project_id)
+    tasks = TM::Project.list_tasks(target_project_id)
+    complete_tasks_arr = tasks.select { |t| t.complete == "t" }
+    complete_tasks_arr.sort_by! { |task| task.creation_time }
+    complete_tasks_arr.reverse!
   end
 
-  def list_incomplete
-    incompleted_tasks_arr = TM.orm.list_projects.select { |task| task.complete == false }
-    incompleted_tasks_arr.sort_by! { |task| task.priority }
-    incompleted_tasks_arr.reverse!
+  # Add sort by creation date if same priority
+  def self.list_incomplete(target_project_id)
+    tasks = TM::Project.list_tasks(target_project_id)
+    incomplete_tasks_arr = tasks.select { |t| t.complete == "f" }
+    incomplete_tasks_arr.sort_by! { |task| task.priority }
+    incomplete_tasks_arr.reverse!
   end
 
 end
