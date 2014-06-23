@@ -85,7 +85,6 @@ class TM::TerminalClient
   end
 
   def self.history
-    binding.pry
     input_project_id = @input_arr[1].to_i
 
     complete_tasks_arr = TM::Project.list_complete(input_project_id)
@@ -111,7 +110,10 @@ class TM::TerminalClient
   end
 
   def self.mark
-    TM::Project.complete_task(@input_arr[1].to_i, @input_arr[2].to_i)
+    project_id = @input_arr[1].to_i
+    task_id = @input_arr[2].to_i
+
+    TM::Project.complete_task(project_id, task_id)
     puts "  Task complete!"
     puts "\n"
     self.start
@@ -128,4 +130,3 @@ TM::TerminalClient.start
 
 # TO DO:
 # Fix list_incomplete sorting (by date + priority)
-# Check to see if history is sorting correctly

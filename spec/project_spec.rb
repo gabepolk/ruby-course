@@ -89,13 +89,13 @@ describe 'Project' do
   end
 
   describe '.mark task' do
-    xit "marks a task as complete" do
+    it "marks a task as complete" do
       project_test = TM::Project.list_projects.first
-      project_test.add_task("This is a description", 5)
-      project_test.add_task("This is another description", 4)
-      TM::Project.complete_task(0, 0)
+      project_test.add_task("This is a description", 5, 1)
+      project_test.add_task("This is another description", 4, 1)
+      TM::Project.complete_task(1, 1)
 
-      expect(project_test.tasks[0].complete).to eq(true)
+      expect(TM::Project.list_complete(1).count).to eq(1)
     end
   end
 

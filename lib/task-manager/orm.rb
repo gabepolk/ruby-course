@@ -75,8 +75,8 @@ module TM
       command = <<-SQL
         UPDATE tasks
         SET complete = true
-        WHERE tasks.id = '#{proj_id}'
-        AND tasks.project_id = '#{task_id}';
+        WHERE tasks.id = '#{task_id}'
+        AND tasks.project_id = '#{proj_id}';
       SQL
 
       @db_adapter.exec(command)

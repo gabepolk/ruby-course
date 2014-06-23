@@ -24,20 +24,8 @@ class TM::Project
     TM.orm.add_task(description, priority, project_id, complete)
   end
 
-  def self.complete_task(proj_id_find, task_id_find)
-    @@project_list.each do |proj|
-      if proj.project_id == proj_id_find
-        proj.tasks.each do |task|
-          if task.task_id == task_id_find
-            task.complete = true
-          end
-        end
-      end
-    end
-
-    # project = TM::Project.list_projects.select { |proj| proj.project_id == proj_id_find }
-    # task = project[0].tasks.select { |task| task.task_id == task_id_find }
-    # task[0].complete = true
+  def self.complete_task(project_id, task_id)
+    TM.orm.complete_task_orm(project_id, task_id)
   end
 
   def self.select_project(id)
