@@ -32,6 +32,19 @@ module TM
       tasks
     end
 
+    def list_employees_orm
+      command = <<-SQL
+        SELECT * FROM employees;
+      SQL
+
+      result = @db_adapter.exec(command).values
+      employees = []
+      result.each do |employee|
+        employees << TM::Employee.new(employee[0], employee[1])
+      end
+      employees
+    end
+
     def add_project(name)
       command = <<-SQL
         INSERT INTO projects (name)
@@ -54,21 +67,23 @@ module TM
       TM::Task.new(result[0].to_i, result[1], result[2].to_i, convert_to_boolean(result[3]), result[4], result[5].to_i)
     end
 
+    def add_employee(name)
+      command = <<-SQL
+        INSERT INTO employees (name)
+        VALUES('#{name}')
+        RETURNING *;
+      SQL
+
+      result = @db_adapter.exec(command).values
+      TM::Employee.new(result[0][0], result[0][1])
+    end
+
     def convert_to_boolean(boolean)
       if boolean == "f"
         false
       elsif boolean == "t"
         true
       end
-    end
-
-    def drop_tables
-      command = <<-SQL
-        DROP TABLE tasks;
-        DROP TABLE projects;
-      SQL
-
-      @db_adapter.exec(command)
     end
 
     def complete_task_orm(proj_id, task_id)
@@ -82,9 +97,25 @@ module TM
       @db_adapter.exec(command)
     end
 
+    def drop_tables
+      command = <<-SQL
+        DROP TABLE tasks;
+        DROP TABLE projects_employees;
+        DROP TABLE projects;
+        DROP TABLE employees;
+      SQL
+
+      @db_adapter.exec(command)
+    end
+
     def create_tables
       command = <<-SQL
         CREATE TABLE projects(
+          id SERIAL,
+          name TEXT,
+          PRIMARY KEY( id )
+        );
+        CREATE TABLE employees(
           id SERIAL,
           name TEXT,
           PRIMARY KEY( id )
@@ -96,14 +127,16 @@ module TM
           complete BOOLEAN,
           creation_time timestamp default current_timestamp,
           PRIMARY KEY( id ),
-          project_id INTEGER REFERENCES projects( id )
+          project_id INTEGER REFERENCES projects( id ),
+          employee_id INTEGER REFERENCES employees( id )
+        );
+        CREATE TABLE projects_employees(
+          id SERIAL,
+          PRIMARY KEY( id ),
+          project_id INTEGER REFERENCES projects( id ),
+          employee_id INTEGER REFERENCES employees( id )
         );
       SQL
-        # CREATE TABLE employees(
-        #   id SERIAL,
-        #   name TEXT,
-        #   PRIMARY KEY( id ),
-        # );
 
       @db_adapter.exec(command)
     end

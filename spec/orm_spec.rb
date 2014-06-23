@@ -10,6 +10,8 @@ describe TM::ORM do
     TM.orm.create_tables
     TM.orm.add_project("test1")
     TM.orm.add_project("test2")
+    TM.orm.add_employee("Bob")
+    TM.orm.add_employee("Joe")
   end
 
   after(:all) do
@@ -34,16 +36,6 @@ describe TM::ORM do
     expect(result[2].name).to eq("test3")
   end
 
-  it "marks a task as complete" do
-    TM.orm.add_task("This is a description", 5, 1, false)
-    TM.orm.add_task("This is a description", 4, 1, false)
-    TM.orm.add_task("This is a description", 1, 1, false)
-    TM.orm.complete_task_orm(1, 1)
-    result = TM::Project.list_complete(1)
-
-    expect(result.count).to eq(1)
-  end
-
   it "adds a task" do
     result = TM.orm.add_task("This is a description", 5, 1, false)
 
@@ -52,6 +44,12 @@ describe TM::ORM do
     expect(result.priority).to eq(5)
     expect(result.complete).to eq(false)
     expect(result.creation_time).to be_a(Time)
+  end
+
+  it "adds an employee" do
+    result = TM.orm.list_employees_orm
+
+    expect(result.count).to eq(2)
   end
 
   it "lists projects" do
@@ -80,6 +78,26 @@ describe TM::ORM do
     expect(complete).to eq("f")
     expect(project_id).to eq(1)
     expect(priority).to eq(5)
+  end
+
+  it "lists employees" do
+    result = TM.orm.list_employees_orm[0]
+    name = result.name
+    employee_id = result.employee_id.to_i
+
+    expect(result).to be_a(TM::Employee)
+    expect(name).to eq("Bob")
+    expect(employee_id).to eq(1)
+  end
+
+  it "marks a task as complete" do
+    TM.orm.add_task("This is a description", 5, 1, false)
+    TM.orm.add_task("This is a description", 4, 1, false)
+    TM.orm.add_task("This is a description", 1, 1, false)
+    TM.orm.complete_task_orm(1, 1)
+    result = TM::Project.list_complete(1)
+
+    expect(result.count).to eq(1)
   end
 
   it "has a unique project_id" do
